@@ -28,11 +28,11 @@ class Client(Base):
         }
         
         self._json = self._config['request']
+        self.log(f'Client has been created: {self._json}')
+        
         with open(self._config['request']['bot'], 'r') as file:
             self._json['file'] = file.read()
         
-        self.log(f'Client has been created: {self._config}')
-
 
     def connect(self):
         try:

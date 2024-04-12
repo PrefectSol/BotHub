@@ -5,6 +5,7 @@ import re
 from tkinter import *
 from hub.game import Game
 
+
 class TicTacToe(Game):
     def __init__(self, settings):
         self._players_count = 2
@@ -158,8 +159,7 @@ class TicTacToe(Game):
                 return False
             
             exec(bot_impl)
-            
-            bot = globals()[match.group(1)]
+            bot = eval(match.group(1))
             self._clients.append((client_info, bot()))
             
             return True

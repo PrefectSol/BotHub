@@ -6,5 +6,5 @@ class Bot(ABC):
         pass
 
     @abstractmethod
-    def get_action(self, state : dict) -> dict:
+    def make_action(self, state : dict) -> dict:
         pass

@@ -2,7 +2,7 @@ from hub.bot import Bot
 
 class RandomBot(Bot):
     def __init__(self):
-        pass
+        print('random bot has been initialized')
 
-    def get_action(self, state : dict) -> dict:
+    def make_action(self, state : dict) -> dict:
         pass

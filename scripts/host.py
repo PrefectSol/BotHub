@@ -38,6 +38,7 @@ class Host(Base):
         self._app.add_url_rule('/', view_func=self.__home)        
         self._app.add_url_rule('/time', view_func=self.__time)
         self._app.add_url_rule('/clients', view_func=self.__clients)
+        self._app.add_url_rule('/data', view_func=self.__data)
         self._app.add_url_rule('/connect', view_func=self.__connect, methods=['POST'])
         
         self._app.config['MAX_CONTENT_LENGTH'] = self._config['max_file_size_mb'] * 1024 * 1024
@@ -50,6 +51,10 @@ class Host(Base):
     def __time(self):
         elapsed_time = time.time() - self._time
         return str(int(elapsed_time)), StatusCode.OK.value
+    
+    
+    def __data(self):
+        pass
 
     
     def __home(self):
@@ -80,17 +85,9 @@ class Host(Base):
 
     def __start_game(self):
         while self._game.is_playing:
-            target = self._game.get_target()
-            # self.send_pckg(target[0], self.act(StatusCode['Continue'].value))
-
-            # action = self.get_pckg(target[0])
-            # if 'answer' in action:
-            #     self._game.make_action(action['answer'])
-            
-            # for client in self._clients:       
-            #     state = self._game.get_state(client)
-            #     self.send_pckg(client[0], self.st(StatusCode['Continue'].value, state))
-                                    
+            # state = self._game.get_state()
+            # send state
+            # self._game.step()             
             
             time.sleep(self._config['game']['delay'])
             

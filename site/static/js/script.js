@@ -11,3 +11,17 @@ function updateClientsCount() {
     });
 }
 setInterval(updateClientsCount, 500);
+
+// function updateGameInfo() {
+//     fetch('/gameInfo').then(response => response.text()).then(data => {
+//         document.getElementById('clientsCount').innerText = data;
+//     });
+// }
+// setInterval(updateClientsCount, 10);
+
+// function updateField() {
+//     fetch('/field').then(response => response.text()).then(data => {
+//         document.getElementById('clientsCount').innerText = data;
+//     });
+// }
+// setInterval(updateClientsCount, 10);

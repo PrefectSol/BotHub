@@ -20,3 +20,4 @@ client:
 
 clear:
 	@python scripts/clear.py
+	

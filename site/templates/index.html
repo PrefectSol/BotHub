@@ -16,7 +16,29 @@
     <div onload="updateClientsCount()">
         Количество подключенных клиентов: <span id="clientsCount"></span>
     </div>
-
+    <div onload="updateGameInfo()">
+        Ход игрока: <span id="playerMove"></span><br>
+        Победитель: <span id="winner"></span>
+    </div>
+    <h3>Игровое поле:</h3>
+    <div onload="updateField()">
+        <table border="2">
+            <tr>
+              <td class="cell"><span id="11"> </span></td>
+              <td class="cell"><span id="12"> </span></td>
+              <td class="cell"><span id="13"> </span></td>
+            </tr>
+            <tr>
+              <td class="cell"><span id="21"> </span></td>
+              <td class="cell"><span id="22"> </span></td>
+              <td class="cell"><span id="23"> </span></td>
+            </tr>
+            <tr>
+              <td class="cell"><span id="31"> </span></td>
+              <td class="cell"><span id="32"> </span></td>
+              <td class="cell"><span id="33"> </span></td>
+            </tr>
+          </table>
+    </div>
 </body>
-
 </html>

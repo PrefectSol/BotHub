@@ -2,43 +2,321 @@
 <html lang="ru">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Bot Hub</title>
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
-    <script src="../static/js/script.js"></script>
-    <link rel="icon" href="../static/images/favicon.ico">
+  <meta charset="UTF-8">
+  <title>Bot Hub</title>
+  <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+  <script src="../static/js/script.js"></script>
+  <link rel="icon" href="../static/images/favicon.ico">
 </head>
 
 <body>
-    <div onload="updateTimer()">
-        Сервер работает: <span id="timer"></span> секунд
+  <div onload="updateTimer()">
+    The server is running for: <span id="timer"></span> seconds
+  </div>
+  <div onload="updateClientsCount()">
+    Count of the connected clients: <span id="clientsCount"></span>
+  </div>
+  <div onload="updateGameInfo()">
+    Player move: <span id="playerMove"></span><br>
+    Winner: <span id="winner"></span>
+  </div>
+  <h3>Game field:</h3>
+  <div class="container">
+    <div onload="updateField1()" id="field1">
+      <table border="1">
+        <tr>
+          <th></th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+          <th>6</th>
+          <th>7</th>
+          <th>8</th>
+          <th>9</th>
+          <th>10</th>
+        </tr>
+        <tr>
+          <th>A</th>
+          <td class="cell" id="A1"></td>
+          <td class="cell" id="A2"></td>
+          <td class="cell" id="A3"></td>
+          <td class="cell" id="A4"></td>
+          <td class="cell" id="A5"></td>
+          <td class="cell" id="A6"></td>
+          <td class="cell" id="A7"></td>
+          <td class="cell" id="A8"></td>
+          <td class="cell" id="A9"></td>
+          <td class="cell" id="A10"></td>
+        </tr>
+        <tr>
+          <th>B</th>
+          <td id=class="cell" id="B1"></td>
+          <td class="cell" id="B2"></td>
+          <td class="cell" id="B3"></td>
+          <td class="cell" id="B4"></td>
+          <td class="cell" id="B5"></td>
+          <td class="cell" id="B6"></td>
+          <td class="cell" id="B7"></td>
+          <td class="cell" id="B8"></td>
+          <td class="cell" id="B9"></td>
+          <td class="cell" id="B10"></td>
+        </tr>
+        <tr>
+          <th>C</th>
+          <td class="cell" id="C1"></td>
+          <td class="cell" id="c2"></td>
+          <td class="cell" id="C3"></td>
+          <td class="cell" id="C4"></td>
+          <td class="cell" id="C5"></td>
+          <td class="cell" id="C6"></td>
+          <td class="cell" id="C7"></td>
+          <td class="cell" id="C8"></td>
+          <td class="cell" id="C9"></td>
+          <td class="cell" id="C10"></td>
+        </tr>
+        <tr>
+          <th>D</th>
+          <td class="cell" id="D1"></td>
+          <td class="cell" id="D2"></td>
+          <td class="cell" id="D3"></td>
+          <td class="cell" id="D4"></td>
+          <td class="cell" id="D5"></td>
+          <td class="cell" id="D6"></td>
+          <td class="cell" id="D7"></td>
+          <td class="cell" id="D8"></td>
+          <td class="cell" id="D9"></td>
+          <td class="cell" id="D10"></td>
+        </tr>
+        <tr>
+          <th>E</th>
+          <td class="cell" id="E1"></td>
+          <td class="cell" id="E2"></td>
+          <td class="cell" id="E3"></td>
+          <td class="cell" id="E4"></td>
+          <td class="cell" id="E5"></td>
+          <td class="cell" id="E6"></td>
+          <td class="cell" id="E7"></td>
+          <td class="cell" id="E8"></td>
+          <td class="cell" id="E9"></td>
+          <td class="cell" id="E10"></td>
+        </tr>
+        <tr>
+          <th>F</th>
+          <td class="cell" id="F1"></td>
+          <td class="cell" id="F2"></td>
+          <td class="cell" id="F3"></td>
+          <td class="cell" id="F4"></td>
+          <td class="cell" id="F5"></td>
+          <td class="cell" id="F6"></td>
+          <td class="cell" id="F7"></td>
+          <td class="cell" id="F8"></td>
+          <td class="cell" id="F9"></td>
+          <td class="cell" id="F10"></td>
+        </tr>
+        <tr>
+          <th>G</th>
+          <td class="cell" id="G1"></td>
+          <td class="cell" id="G2"></td>
+          <td class="cell" id="G3"></td>
+          <td class="cell" id="G4"></td>
+          <td class="cell" id="G5"></td>
+          <td class="cell" id="G6"></td>
+          <td class="cell" id="G7"></td>
+          <td class="cell" id="G8"></td>
+          <td class="cell" id="G9"></td>
+          <td class="cell" id="G10"></td>
+        </tr>
+        <tr>
+          <th>H</th>
+          <td class="cell" id="H1"></td>
+          <td class="cell" id="H2"></td>
+          <td class="cell" id="H3"></td>
+          <td class="cell" id="H4"></td>
+          <td class="cell" id="H5"></td>
+          <td class="cell" id="H6"></td>
+          <td class="cell" id="H7"></td>
+          <td class="cell" id="H8"></td>
+          <td class="cell" id="H9"></td>
+          <td class="cell" id="H10"></td>
+        </tr>
+        <tr>
+          <th>I</th>
+          <td class="cell" id="I1"></td>
+          <td class="cell" id="I2"></td>
+          <td class="cell" id="I3"></td>
+          <td class="cell" id="I4"></td>
+          <td class="cell" id="I5"></td>
+          <td class="cell" id="I6"></td>
+          <td class="cell" id="I7"></td>
+          <td class="cell" id="I8"></td>
+          <td class="cell" id="I9"></td>
+          <td class="cell" id="I10"></td>
+        </tr>
+        <tr>
+          <th>J</th>
+          <td class="cell" id="J1"></td>
+          <td class="cell" id="J2"></td>
+          <td class="cell" id="J3"></td>
+          <td class="cell" id="J4"></td>
+          <td class="cell" id="J5"></td>
+          <td class="cell" id="J6"></td>
+          <td class="cell" id="J7"></td>
+          <td class="cell" id="J8"></td>
+          <td class="cell" id="J9"></td>
+          <td class="cell" id="J10"></td>
+        </tr>
+      </table>
     </div>
-    <div onload="updateClientsCount()">
-        Количество подключенных клиентов: <span id="clientsCount"></span>
+    <div onload="updateField2()" id="field2">
+      <table border="1">
+        <tr>
+          <th></th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+          <th>6</th>
+          <th>7</th>
+          <th>8</th>
+          <th>9</th>
+          <th>10</th>
+        </tr>
+        <tr>
+          <th>A</th>
+          <td class="cell" id="A1"></td>
+          <td class="cell" id="A2"></td>
+          <td class="cell" id="A3"></td>
+          <td class="cell" id="A4"></td>
+          <td class="cell" id="A5"></td>
+          <td class="cell" id="A6"></td>
+          <td class="cell" id="A7"></td>
+          <td class="cell" id="A8"></td>
+          <td class="cell" id="A9"></td>
+          <td class="cell" id="A10"></td>
+        </tr>
+        <tr>
+          <th>B</th>
+          <td class="cell" id="B1"></td>
+          <td class="cell" id="B2"></td>
+          <td class="cell" id="B3"></td>
+          <td class="cell" id="B4"></td>
+          <td class="cell" id="B5"></td>
+          <td class="cell" id="B6"></td>
+          <td class="cell" id="B7"></td>
+          <td class="cell" id="B8"></td>
+          <td class="cell" id="B9"></td>
+          <td class="cell" id="B10"></td>
+        </tr>
+        <tr>
+          <th>C</th>
+          <td class="cell" id="C1"></td>
+          <td class="cell" id="c2"></td>
+          <td class="cell" id="C3"></td>
+          <td class="cell" id="C4"></td>
+          <td class="cell" id="C5"></td>
+          <td class="cell" id="C6"></td>
+          <td class="cell" id="C7"></td>
+          <td class="cell" id="C8"></td>
+          <td class="cell" id="C9"></td>
+          <td class="cell" id="C10"></td>
+        </tr>
+        <tr>
+          <th>D</th>
+          <td class="cell" id="D1"></td>
+          <td class="cell" id="D2"></td>
+          <td class="cell" id="D3"></td>
+          <td class="cell" id="D4"></td>
+          <td class="cell" id="D5"></td>
+          <td class="cell" id="D6"></td>
+          <td class="cell" id="D7"></td>
+          <td class="cell" id="D8"></td>
+          <td class="cell" id="D9"></td>
+          <td class="cell" id="D10"></td>
+        </tr>
+        <tr>
+          <th>E</th>
+          <td class="cell" id="E1"></td>
+          <td class="cell" id="E2"></td>
+          <td class="cell" id="E3"></td>
+          <td class="cell" id="E4"></td>
+          <td class="cell" id="E5"></td>
+          <td class="cell" id="E6"></td>
+          <td class="cell" id="E7"></td>
+          <td class="cell" id="E8"></td>
+          <td class="cell" id="E9"></td>
+          <td class="cell" id="E10"></td>
+        </tr>
+        <tr>
+          <th>F</th>
+          <td class="cell" id="F1"></td>
+          <td class="cell" id="F2"></td>
+          <td class="cell" id="F3"></td>
+          <td class="cell" id="F4"></td>
+          <td class="cell" id="F5"></td>
+          <td class="cell" id="F6"></td>
+          <td class="cell" id="F7"></td>
+          <td class="cell" id="F8"></td>
+          <td class="cell" id="F9"></td>
+          <td class="cell" id="F10"></td>
+        </tr>
+        <tr>
+          <th>G</th>
+          <td class="cell" id="G1"></td>
+          <td class="cell" id="G2"></td>
+          <td class="cell" id="G3"></td>
+          <td class="cell" id="G4"></td>
+          <td class="cell" id="G5"></td>
+          <td class="cell" id="G6"></td>
+          <td class="cell" id="G7"></td>
+          <td class="cell" id="G8"></td>
+          <td class="cell" id="G9"></td>
+          <td class="cell" id="G10"></td>
+        </tr>
+        <tr>
+          <th>H</th>
+          <td class="cell" id="H1"></td>
+          <td class="cell" id="H2"></td>
+          <td class="cell" id="H3"></td>
+          <td class="cell" id="H4"></td>
+          <td class="cell" id="H5"></td>
+          <td class="cell" id="H6"></td>
+          <td class="cell" id="H7"></td>
+          <td class="cell" id="H8"></td>
+          <td class="cell" id="H9"></td>
+          <td class="cell" id="H10"></td>
+        </tr>
+        <tr>
+          <th>I</th>
+          <td class="cell" id="I1"></td>
+          <td class="cell" id="I2"></td>
+          <td class="cell" id="I3"></td>
+          <td class="cell" id="I4"></td>
+          <td class="cell" id="I5"></td>
+          <td class="cell" id="I6"></td>
+          <td class="cell" id="I7"></td>
+          <td class="cell" id="I8"></td>
+          <td class="cell" id="I9"></td>
+          <td class="cell" id="I10"></td>
+        </tr>
+        <tr>
+          <th>J</th>
+          <td class="cell" id="J1"></td>
+          <td class="cell" id="J2"></td>
+          <td class="cell" id="J3"></td>
+          <td class="cell" id="J4"></td>
+          <td class="cell" id="J5"></td>
+          <td class="cell" id="J6"></td>
+          <td class="cell" id="J7"></td>
+          <td class="cell" id="J8"></td>
+          <td class="cell" id="J9"></td>
+          <td class="cell" id="J10"></td>
+        </tr>
+      </table>
     </div>
-    <div onload="updateGameInfo()">
-        Ход игрока: <span id="playerMove"></span><br>
-        Победитель: <span id="winner"></span>
-    </div>
-    <h3>Игровое поле:</h3>
-    <div onload="updateField()">
-        <table border="2">
-            <tr>
-              <td class="cell"><span id="11"> </span></td>
-              <td class="cell"><span id="12"> </span></td>
-              <td class="cell"><span id="13"> </span></td>
-            </tr>
-            <tr>
-              <td class="cell"><span id="21"> </span></td>
-              <td class="cell"><span id="22"> </span></td>
-              <td class="cell"><span id="23"> </span></td>
-            </tr>
-            <tr>
-              <td class="cell"><span id="31"> </span></td>
-              <td class="cell"><span id="32"> </span></td>
-              <td class="cell"><span id="33"> </span></td>
-            </tr>
-          </table>
-    </div>
+  </div>
 </body>
+
 </html>

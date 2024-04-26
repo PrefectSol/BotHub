@@ -8,39 +8,19 @@ class Game(ABC):
         
         
     @abstractmethod
-    def __init__(self, settings):
+    def set_state(self):
         pass
 
-    @abstractmethod
-    def run(self):
-        pass
-    
-    @abstractmethod
-    def exit(self):
-        pass
-        
-    @abstractmethod
-    def get_state(self, client) -> dict:
-        pass
-    
-    @abstractmethod
-    def view_state(self, state : dict):
-        pass
-    
-    @abstractmethod
-    def get_target(self) -> list:
-        pass
-
-    @abstractmethod
-    def get_action(self) -> dict:
-        pass
-        
-    @abstractmethod
-    def make_action(self, action : dict):
-        pass
-    
     @abstractmethod
     def add_client(self, client_info, bot_impl) -> bool:
+        pass
+    
+    @abstractmethod
+    def step(self):
+        pass
+    
+    @abstractmethod
+    def get_state(self) -> dict:
         pass
 
     @property

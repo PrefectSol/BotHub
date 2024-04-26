@@ -6,5 +6,9 @@ class Bot(ABC):
         pass
 
     @abstractmethod
+    def set_state(self, state : dict) -> dict:
+        pass
+
+    @abstractmethod
     def make_action(self, state : dict) -> dict:
         pass

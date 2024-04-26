@@ -1,11 +1,12 @@
 from datetime import datetime
-from hub.TicTacToe.tictactoe import TicTacToe
-
+# from hub.TicTacToe.tictactoe import TicTacToe
+from hub.SeaBattle.seabattle import SeaBattle
 
 class Base:
     def __init__(self):
         self._games = {
-            'TicTacToe' : TicTacToe
+            # 'TicTacToe' : TicTacToe,
+            'SeaBattle' : SeaBattle
         }
         
         self.log(f'Available games: {list(self._games.keys())}')

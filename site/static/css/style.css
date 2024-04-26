@@ -1,8 +1,14 @@
-table {
-    width: 210px;
+.cell {
+    width: 30px;
+    height: 30px;
+    background-color: white;
 }
 
-.cell {
-    height: 70px;
-    font-size: 20px;
+.container {
+    display: flex;
+    padding: 1em;
+}
+
+#field2 {
+    padding-left: 30px;
 }

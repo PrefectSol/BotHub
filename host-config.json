@@ -4,8 +4,8 @@
     "debug": false,
     "max_file_size_mb" : 16,
     "game": {
-        "name": "TicTacToe",
-        "settings": "hub/TicTacToe/settings.json",
+        "name": "SeaBattle",
+        "settings": "hub/SeaBattle/settings.json",
         "delay": 0.0
     }
 }

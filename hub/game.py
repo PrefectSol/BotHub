@@ -6,23 +6,6 @@ class Game(ABC):
         self._is_playing = None
         self._clients = None
         
-        
-    @abstractmethod
-    def set_state(self):
-        pass
-
-    @abstractmethod
-    def add_client(self, client_info, bot_impl) -> bool:
-        pass
-    
-    @abstractmethod
-    def step(self):
-        pass
-    
-    @abstractmethod
-    def get_state(self) -> dict:
-        pass
-
     @property
     def players_count(self):
         return self._players_count
@@ -46,3 +29,20 @@ class Game(ABC):
     @clients.setter
     def clients(self, clients):
         self._clients = clients
+
+        
+    @abstractmethod
+    def set_state(self):
+        pass
+    
+    @abstractmethod
+    def get_state(self) -> dict:
+        pass
+
+    @abstractmethod
+    def add_client(self, client_info, bot_impl) -> bool:
+        pass
+    
+    @abstractmethod
+    def step(self):
+        pass

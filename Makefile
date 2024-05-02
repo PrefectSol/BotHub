@@ -1,13 +1,13 @@
 install-all: install-hub install-seabattle install-tic-tac-toe
 
 install-hub:
-	@pip install -r requirments.txt
+	@pip install -r requirements.txt
 
 install-seabattle:
-	@pip install -r hub/SeaBattle/requirments.txt
+	@pip install -r hub/SeaBattle/requirements.txt
 
 install-tic-tac-toe:
-	@pip install -r hub/TicTacToe/requirments.txt
+	@pip install -r hub/TicTacToe/requirements.txt
 
 build:
 	@docker build -t bothub .

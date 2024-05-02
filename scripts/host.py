@@ -54,7 +54,7 @@ class Host(Base):
     
     
     def __data(self):
-        return "self.__game.get_state()", StatusCode.OK.value
+        return self._game.get_state(), StatusCode.OK.value
 
     
     def __home(self):
@@ -86,15 +86,11 @@ class Host(Base):
     def __start_game(self):
         self._game.set_state()
         
-        while self._game.is_playing:
-            # send state to server
-            
+        while self._game.is_playing:            
             self._game.step()             
-            
             time.sleep(self._config['game']['delay'])
             
-        #send final state to server
-
+            
     def run(self):
         self._process = threading.Thread(target=self.__start_game, daemon=True)
         self._app.run(host=self._config['host'], port=self._config['port'], debug=self._config['debug'])

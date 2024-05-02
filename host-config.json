@@ -6,6 +6,6 @@
     "game": {
         "name": "SeaBattle",
         "settings": "hub/SeaBattle/settings.json",
-        "delay": 0.0
+        "delay": 0.1
     }
 }

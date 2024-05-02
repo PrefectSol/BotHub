@@ -1,0 +1,11 @@
+{
+    "host": "172.17.0.2",
+    "port": "5000",
+    "request": {
+        "bot": "bot/bot.py",
+        "metadata": {
+            "from": "client_name",
+            "description": "bot v1.0"
+        }
+    }
+}

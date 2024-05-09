@@ -8,7 +8,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from flask import Flask, request, render_template
 from utils.base import Base
-from utils.http_codes import StatusCode
+from utils.status import StatusCode
 
 class Host(Base):
     def __init__(self, opt):

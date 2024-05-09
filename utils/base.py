@@ -1,25 +1,30 @@
+import os
+
 from datetime import datetime
+
+from utils.status import StatusCode
+
+
 # from hub.TicTacToe.tictactoe import TicTacToe
-from hub.SeaBattle.seabattle import SeaBattle
+# from hub.SeaBattle.seabattle import SeaBattle
 
 class Base:
-    def __init__(self):
-        self._games = {
-            # 'TicTacToe' : TicTacToe,
-            'SeaBattle' : SeaBattle
-        }
+    def __init__(self, log_dir: str):
+        self._log_file = os.path.join(log_dir, datetime.now().strftime("%Y-%m-%d-%H-%M-%S"))
         
-        self.log(f'Available games: {list(self._games.keys())}')
+        # self._games = {
+        #     # 'TicTacToe' : TicTacToe,
+        #     'SeaBattle' : SeaBattle
+        # }
+        
+        # self.log(f'Available games: {list(self._games.keys())}')
 
 
-    def log(self, msg):
-        print(f'[{datetime.now()}] - {msg}')
-        
-        
-    def msg(self, msg, code):
-        return {"message": msg}, code
+    def log(self, msg: str, status: StatusCode):
+        with open(self._log_file, 'a') as file:
+            file.write(f'[{datetime.now()}] --- [{status.name}:{status.value}] --- {msg }')
 
     
-    @property
-    def games(self):
-        return self._games;    
+    # @property
+    # def games(self):
+    #     return self._games;    

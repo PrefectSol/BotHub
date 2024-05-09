@@ -1,0 +1,10 @@
+{
+    "platform-file": ".platform",
+    "database": "platform/database",
+
+    "control": {
+        "stop-timeout": 2
+    },
+
+    "encoding-std": "utf-8"
+}

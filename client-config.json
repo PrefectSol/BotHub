@@ -9,3 +9,26 @@
         }
     }
 }
+
+
+
+import signal
+import sys
+import time
+
+def signal_handler(signum, frame):
+    global isrun
+    isrun = False
+
+signal.signal(signal.SIGTERM, signal_handler)
+
+isrun = True
+i = 0
+while(isrun):
+    with open('/bothub-platform/database/test1.txt', 'w') as file:
+        file.write(f'{i}')
+        i += 1
+    time.sleep(1)
+
+with open('/bothub-platform/database/test2.txt', 'w') as file:
+    file.write('DEL')

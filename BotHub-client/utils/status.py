@@ -2,8 +2,11 @@ from enum import Enum
 
 
 class StatusCode(Enum):
+    Unknown = -1
     Success = 0
-    LoadConfigError = 1
+    Finished = 1
+    StopSignal = 2
+    LoadConfigError = 3
     
 
 class HttpCode(Enum):

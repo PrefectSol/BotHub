@@ -3,6 +3,7 @@ import os
 import json
 import subprocess
 
+
 def start(opt) -> int:
     try:        
         with open(opt.config, 'r') as file:
@@ -15,10 +16,11 @@ def start(opt) -> int:
         print('ERROR: An instance of the platform already exists. The existence of more than one platform is not allowed.')
         return 1
 
-    dpid = subprocess.check_output(['docker', 'run', '-v', f'{os.getcwd()}/{config["database"]}:/bothub-platform/database', '-d', 'bothub-platform'])
+    dpid = subprocess.check_output(['docker', 'run', '-v', f'{os.path.join(os.getcwd(), config["database"])}:/bothub-platform/database', '-d', 'bothub-platform'])
 
     data = {
-        'dpid': dpid.decode(config['encoding-std']).strip()
+        'dpid': dpid.decode(config['encoding-std']).strip(),
+        'NetModule': False
     }
 
     with open(config['platform-file'], 'wb') as file:

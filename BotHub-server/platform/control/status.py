@@ -1,9 +1,9 @@
 import argparse
 import os
 import json
-import subprocess
 
-def stop(opt) -> int:
+
+def status(opt) -> int:
     try:        
         with open(opt.config, 'r') as file:
             config = json.load(file)
@@ -12,18 +12,14 @@ def stop(opt) -> int:
         return 1
 
     if not os.path.isfile(config['platform-file']):
-        print('ERROR: The platform instance does not exist.')
+        print('STATUS: The platform instance does not exist.')
         return 1
 
     with open(config['platform-file'], 'rb') as file:
-        dpid = json.loads(file.read().decode(config['encoding-std']))['dpid']
+        data = json.loads(file.read().decode(config['encoding-std']))
 
-    print(f'STOP: The platform has started to stop: wait {config["control"]["stop-timeout"]} seconds')
-
-    subprocess.run(['docker', 'stop', '-t', str(config['control']['stop-timeout']), dpid])
-    
-    if os.path.isfile(config['platform-file']):
-        os.remove(config['platform-file'])
+    print('STATUS: The platform instance is exists.')
+    print(json.dumps(data, indent=4))
     
     return 0
 
@@ -37,4 +33,4 @@ def parse_opt():
 
 if __name__ == '__main__':
     opt = parse_opt()
-    exit(stop(opt))
+    exit(status(opt))

@@ -1,59 +1,70 @@
-import requests
 import argparse
 import json
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from requests.exceptions import RequestException
 from hub.network_interface import NetworkInterface
 
 
-class Client:
-    def __init__(self, opt):
-        super().__init__()
-        print(f'Optional arguments: {opt}')
-
-        try:
-            with open(opt.config, 'r') as file:
-                self._config = json.load(file)
-        except Exception as e:
-            print(f'Error loading configuration: {e}')
-            return
-
-        self._url = f"http://{self._config['host']}:{self._config['port']}/connect"
-        self._headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        }
-        
-        self._json = self._config['request']
-        print(f'Client has been created: {self._json}')
-        
-        with open(self._config['request']['bot'], 'r') as file:
-            self._json['file'] = file.read()
-        
-
-    def connect(self):
-        try:
-            response = requests.post(url=self._url, json=self._json, headers=self._headers)
-            print(f"Status: {response.status_code} {json.loads(response.text)['message']}")
-        except RequestException as e:
-            print(f'Request Error: {e}')
-        except Exception as e:
-            print(f'Error: {e}')
-            
-def create(opt):
-    manager = NetworkInterface()
+def create_host(opt) -> int:
+    print(f'Optional arguments: {opt}')
     
+    try:
+        with open(opt.cconfig, 'r') as file:
+            client_config = json.load(file)
+            user_id = client_config['auth']['user_id']
+            user_secret = client_config['auth']['user_secret']
+            NetworkInterface.server_url = f"http://{client_config['host']}:{client_config['port']}"
+            
+        with open(opt.hconfig, 'r') as file:
+            host_config = json.load(file)
+    except Exception as exc:
+        print(f'Error loading configurations: {exc}')
+        return 1
+    
+    if not os.path.isfile(host_config['hostfile']):
+        print('The source code of the host game could not be found.')
+        return 1
+    
+    with open(host_config['hostfile'], 'r') as file:
+        source = file.read()
+
+    host = {
+        'source': source,
+        'settings': host_config['settings'],
+        'name': host_config['game']['name'],
+        'delay': host_config['game']['delay'],
+        'iterations': host_config['game']['iterations'],
+    }
+    
+    handler = NetworkInterface(user_id, user_secret)
+    try:
+        result = handler.create_host(host=host)
+    except Exception as exc:
+        print(f'Failed to create host game: {exc}')
+        return 1
+
+    result = result['answer']
+    
+    if 'error' in result:
+        print('Host creation error:', result['error'])
+        return 1
+        
+    print('The new users game enviroment has been successfully hosted.')
+    print(result)
+    
+    return 0
 
 
 def parse_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default="host-config.json", help="path to host-config.json")
+    parser.add_argument("--cconfig", type=str, default="client-config.json", help="path to client-config.json")
+    parser.add_argument("--hconfig", type=str, default="host-config.json", help="path to host-config.json")
 
     return parser.parse_args()
 
+
 if __name__ == "__main__":
     opt = parse_opt()
-    create(opt)
+    exit(create_host(opt))

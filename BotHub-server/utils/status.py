@@ -7,6 +7,9 @@ class StatusCode(Enum):
     Finished = 1
     StopSignal = 2
     LoadConfigError = 3
+    UnknownUser = 4
+    InvalidSignature = 5
+    InvalidPermissions = 6
     
 
 class HttpCode(Enum):
@@ -14,4 +17,5 @@ class HttpCode(Enum):
     Ok = 200
     BadRequest = 400
     Gone = 410
+    InternalServerError = 500
     ServiceUnvaliable = 503

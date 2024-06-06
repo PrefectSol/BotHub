@@ -14,8 +14,8 @@ install-tic-tac-toe:
 build-platform:
 	@docker build -t bothub-platform .
 
-host:
-	@docker run -p 80:5000 bothub
+# host:
+# 	@docker run -p 80:5000 bothub
 	
 client:
 	@python scripts/client.py
@@ -23,8 +23,8 @@ client:
 clear:
 	@python scripts/clear.py
 
-rmlog:
-	@sudo rm -rf platform/database/logs
+rmdb:
+	@sudo rm -rf platform/database/*
 	
 start:
 	@python platform/control/start.py $(filter-out $@,$(MAKECMDGOALS))

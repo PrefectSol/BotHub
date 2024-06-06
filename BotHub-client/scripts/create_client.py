@@ -14,25 +14,28 @@ def auth(opt) -> int:
     try:
         with open(opt.config, 'r') as file:
             config = json.load(file)
+            NetworkInterface.server_url = f"http://{config['host']}:{config['port']}"
     except Exception as exc:
         print(f'Error loading configuration: {exc}')
         return 1
     
     try:
-        api_data = NetworkInterface.generate_api_data(Permissions(config['auth']['permissions']['hostManagement'],
+        api_data = NetworkInterface.generate_user(Permissions(config['auth']['permissions']['hostManagement'],
                                                                   config['auth']['permissions']['botManagement'],
                                                                   config['auth']['permissions']['databaseView']))
     except Exception as exc:
         print(f'Failed to create API key: {exc}')
         return 1
+
+    api_data = api_data['answer']
     
     if 'error' in api_data:
         print('Key creation error:', api_data['error'])
         return 1
     
     try:
-        config['auth']['apiKey'] = api_data['apiKey']
-        config['auth']['apiSecret'] = api_data['apiSecret']
+        config['auth']['user_id'] = api_data['user_id']
+        config['auth']['user_secret'] = api_data['user_secret']
     except Exception as exc:
         print(f'Failed to read API key or secret: {exc}')
         return 1
@@ -41,7 +44,8 @@ def auth(opt) -> int:
         file.write(json.dumps(config, indent=4))
         
     print('The API key has been successfully written to the config.json')
-        
+    print(api_data)
+
     return 0
 
 

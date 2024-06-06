@@ -10,4 +10,4 @@ COPY platform/ /bothub-platform/platform/
 COPY utils/ /bothub-platform/utils
 COPY hub/ /bothub-platform/hub
 
-CMD ["python", "platform/platform.py"]
+CMD ["python", "platform/splatform.py"]

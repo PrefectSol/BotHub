@@ -5,8 +5,8 @@
             "botManagement": true,
             "databaseView": true
         },
-        "apiKey": "",
-        "apiSecret": ""
+        "user_id": "2",
+        "user_secret": "6352154a3f5ddf8b5327802a72aee601"
     },
     "host": "172.17.0.2",
     "port": "5000",

@@ -1,7 +1,7 @@
 import argparse
 import os
 import json
-import signal
+import subprocess
 
 def disable_net(opt) -> int:
     try:        
@@ -22,11 +22,12 @@ def disable_net(opt) -> int:
         print('The network module is already disabled.')
         return 1
     
+    subprocess.run(['docker', 'kill', '-s', 'SIGUSR1', data['dpid']])
+    
     data['NetModule'] = False
     with open(config['platform-file'], 'wb') as file:
         file.write(json.dumps(data).encode(config['encoding-std']))
-    
-    os.kill(data['dpid'], signal.SIGUSR1)
+        
     print('The network module has been disabled.')
     
     return 0

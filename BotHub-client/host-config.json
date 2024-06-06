@@ -1,15 +1,11 @@
 {
-    "host": "0.0.0.0",
-    "port": 5000,
-    "debug": false,
-    "max_file_size_mb": 16,
+    "hostfile": "hub/SeaBattle/seabattle.py",
     "game": {
         "name": "SeaBattle",
-        "settings": "hub/SeaBattle/settings.json",
         "delay": 0.1,
         "iterations": 5
     },
-    "database": {
-        "path": "database/"
+    "settings": {
+        "first move": 1
     }
 }

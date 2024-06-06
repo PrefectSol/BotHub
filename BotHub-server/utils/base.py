@@ -50,7 +50,7 @@ class Base:
             time.sleep(self._delay)
     
     
-    def __check_user(self, user_id, user_sign, permissions: Permissions = None) -> StatusCode:
+    def __check_user(self, user_id, user_sign, permissions = None) -> StatusCode:
         userfile = os.path.join(self._users_dir, f'user_{user_id}.env')
         if not os.path.isfile(userfile):
             return StatusCode.UnknownUser
@@ -62,7 +62,9 @@ class Base:
             return StatusCode.InvalidSignature
         
         if permissions != None:
-            if not(data[1] == str(permissions.get_host_permission()) and data[2] == str(permissions.get_bot_permission()) and data[3] == str(permissions.get_view_permission())):
+            if not (int(data[1] == 'True') >= int(permissions[0]) and
+                    int(data[2] == 'True') >= int(permissions[1]) and
+                    int(data[3] == 'True') >= int(permissions[2])):
                 return StatusCode.InvalidPermissions
             
         return StatusCode.Success
@@ -80,8 +82,35 @@ class Base:
         
         
     def create_host(self, user_id, user_sign, host: dict) -> tuple[int, StatusCode]:
-        pass
-            
+        result = self.__check_user(user_id=user_id, user_sign=user_sign, permissions=(True, False, False))
+        if result != StatusCode.Success:
+            return -1, result
+        
+        dirs = [name for name in os.listdir(self._hosts_dir) if os.path.isdir(os.path.join(self._users_dir, name)) and name.startswith('host_')]
+        numbers = [int(file.split('_')[1]) for file in dirs]
+        host_id = str(min(set(range(1, len(numbers) + 2)) - set(numbers)))
+        
+        hostdir = os.path.join(self._hosts_dir, f'host_{host_id}/')
+        os.mkdir(hostdir)
+        
+        with open(os.path.join(hostdir, 'Dockerfile'), 'w') as file:
+            file.write(f'''FROM python:3.12.3
+
+WORKDIR /bothub-platform-host-{host_id}
+
+COPY platform/requirements.txt /bothub-platform/platform/requirements.txt
+
+RUN pip install --no-cache-dir -r platform/requirements.txt
+
+COPY platform/ /bothub-platform/platform/
+COPY utils/ /bothub-platform/utils
+COPY hub/ /bothub-platform/hub
+
+CMD ["python", "platform/splatform.py"]''')
+        
+                
+        return host_id, StatusCode.Success
+        
     
     def delete_user(self, user_id, user_sign) -> StatusCode:
         userfile = os.path.join(self._users_dir, f'user_{user_id}.env')

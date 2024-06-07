@@ -2,7 +2,9 @@ import os
 import time
 import threading
 import hashlib
+import json
 import secrets
+import subprocess
 from datetime import datetime
 
 from utils.status import StatusCode
@@ -32,8 +34,9 @@ class Base:
         self._update_thread = threading.Thread(target=self.__updater)
     
 
-    def init_base(self, encoder):
+    def init_base(self, encoder, platform_file):
         self._encoder = encoder
+        self._platform_file = platform_file
     
         
     def __update_dates(self):
@@ -80,7 +83,7 @@ class Base:
     def stop_updater(self):
         self._is_update = False
         
-        
+
     def create_host(self, user_id, user_sign, host: dict) -> tuple[int, StatusCode]:
         result = self.__check_user(user_id=user_id, user_sign=user_sign, permissions=(True, False, False))
         if result != StatusCode.Success:
@@ -93,22 +96,43 @@ class Base:
         hostdir = os.path.join(self._hosts_dir, f'host_{host_id}/')
         os.mkdir(hostdir)
         
+        requirements_file = os.path.join(hostdir, 'requirements.txt')
+        with open(requirements_file, 'w') as file:
+            file.write(host['requirements'])
+            
+        host_file = os.path.join(hostdir, 'host.py')
+        with open(host_file, 'w') as file:
+            file.write(host['source'])
+                     
         with open(os.path.join(hostdir, 'Dockerfile'), 'w') as file:
             file.write(f'''FROM python:3.12.3
 
 WORKDIR /bothub-platform-host-{host_id}
 
-COPY platform/requirements.txt /bothub-platform/platform/requirements.txt
+COPY {requirements_file} /bothub-platform-host-{host_id}/requirements.txt
 
-RUN pip install --no-cache-dir -r platform/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY platform/ /bothub-platform/platform/
-COPY utils/ /bothub-platform/utils
-COPY hub/ /bothub-platform/hub
+COPY hub/bot.py /bothub-platform/bot.py
+COPY hub/game.py /bothub-platform/game.py
+COPY hub/host_process.py /bothub-platform/host_process.py
+COPY {host_file} /bothub-platform/host.py
 
-CMD ["python", "platform/splatform.py"]''')
+CMD ["python", "host_process.py"]''')
         
-                
+        result = subprocess.check_output(['docker', 'build', '-t', f'bothub-platform-host-{host_id}', hostdir])
+        host_dpid = subprocess.check_output(['docker', 'run', '-d', f'bothub-platform-host-{host_id}'])
+
+        with open(self._platform_file, 'rb') as file:
+            data = json.loads(file.read().decode(self._encoder))
+            
+        if not 'hosts' in data: 
+            data['hosts'] = []
+        data['hosts'].append(host_dpid)
+        
+        with open(self._platform_file, 'wb') as file:
+            file.write(json.dumps(data).encode(self._encoder))
+                    
         return host_id, StatusCode.Success
         
     

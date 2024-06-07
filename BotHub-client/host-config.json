@@ -7,5 +7,6 @@
     },
     "settings": {
         "first move": 1
-    }
+    },
+    "requirements": "numpy"
 }

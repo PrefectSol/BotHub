@@ -37,7 +37,7 @@ class Platform(Base):
         signal.signal(signal.SIGTERM, self.__stop)
         signal.signal(signal.SIGUSR1, self.__switch_net)
         
-        self.init_base(self._encoder)
+        self.init_base(self._encoder, self._platform_file)
         self.run_updater(self._updater_every_hours, self._updater_delay_seconds)
     
         self._app = Flask(__name__)

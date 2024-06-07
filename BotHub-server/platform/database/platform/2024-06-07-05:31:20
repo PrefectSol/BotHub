@@ -1,0 +1,18 @@
+[2024-06-07 05:31:20.464088] --- [Success:0] --- The platform has been successfully initialized.
+[2024-06-07 05:31:20.464746] --- [Success:0] --- running....
+[2024-06-07 05:31:20.464918] --- [Unknown:-1] --- some log
+[2024-06-07 05:31:21.465618] --- [Unknown:-1] --- some log
+[2024-06-07 05:31:22.466323] --- [Unknown:-1] --- some log
+[2024-06-07 05:31:23.466855] --- [Unknown:-1] --- some log
+[2024-06-07 05:31:24.308260] --- [Success:0] --- Network module has been switched to: True
+[2024-06-07 05:31:24.467344] --- [Unknown:-1] --- some log
+[2024-06-07 05:31:25.467696] --- [Unknown:-1] --- some log
+[2024-06-07 05:31:26.468321] --- [Unknown:-1] --- some log
+[2024-06-07 05:31:26.616843] --- [Success:0] --- Network module has been switched to: False
+[2024-06-07 05:31:27.469001] --- [Unknown:-1] --- some log
+[2024-06-07 05:31:28.469675] --- [Unknown:-1] --- some log
+[2024-06-07 05:31:29.003504] --- [Success:0] --- Network module has been switched to: True
+[2024-06-07 05:31:29.470116] --- [Unknown:-1] --- some log
+[2024-06-07 05:31:30.470752] --- [Unknown:-1] --- some log
+[2024-06-07 05:31:31.167930] --- [StopSignal:2] --- Stop signal
+[2024-06-07 05:31:31.471390] --- [Success:0] --- stopped....

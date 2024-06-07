@@ -33,9 +33,7 @@ def create_host(opt) -> int:
     host = {
         'source': source,
         'settings': host_config['settings'],
-        'name': host_config['game']['name'],
-        'delay': host_config['game']['delay'],
-        'iterations': host_config['game']['iterations'],
+        'requirements': host_config['requirements']
     }
     
     handler = NetworkInterface(user_id, user_secret)

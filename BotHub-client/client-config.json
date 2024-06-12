@@ -5,8 +5,8 @@
             "botManagement": true,
             "databaseView": true
         },
-        "user_id": "2",
-        "user_secret": "44514e292c6e6b3613220c93eb3da773"
+        "user_id": "1",
+        "user_secret": "d174ddc29340e10a67bd147eca04deb4"
     },
     "host": "172.17.0.2",
     "port": "5000",

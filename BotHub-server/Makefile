@@ -13,9 +13,6 @@ install-tic-tac-toe:
 
 build-platform:
 	@docker build -t bothub-platform .
-
-# host:
-# 	@docker run -p 80:5000 bothub
 	
 client:
 	@python scripts/client.py

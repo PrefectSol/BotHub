@@ -32,6 +32,7 @@ def create_host(opt) -> int:
 
     host = {
         'source': source,
+        'game': host_config['game'],
         'settings': host_config['settings'],
         'requirements': host_config['requirements']
     }
@@ -50,7 +51,10 @@ def create_host(opt) -> int:
         return 1
         
     print('The new users game enviroment has been successfully hosted.')
-    print(result)
+    
+    host_config['host_id'] = result['host_id']
+    with open(opt.hconfig, 'w') as file:
+        file.write(json.dumps(host_config, indent=4))
     
     return 0
 

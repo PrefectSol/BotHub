@@ -8,5 +8,6 @@
     "settings": {
         "first move": 1
     },
-    "requirements": "numpy"
+    "requirements": "numpy",
+    "host_id": "1"
 }

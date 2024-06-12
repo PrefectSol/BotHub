@@ -21,8 +21,8 @@ def auth(opt) -> int:
     
     try:
         api_data = NetworkInterface.generate_user(Permissions(config['auth']['permissions']['hostManagement'],
-                                                                  config['auth']['permissions']['botManagement'],
-                                                                  config['auth']['permissions']['databaseView']))
+                                                                config['auth']['permissions']['botManagement'],
+                                                                config['auth']['permissions']['databaseView']))
     except Exception as exc:
         print(f'Failed to create API key: {exc}')
         return 1

@@ -10,6 +10,9 @@ class StatusCode(Enum):
     UnknownUser = 4
     InvalidSignature = 5
     InvalidPermissions = 6
+    FailedCreateHost = 7
+    FailedCreateUserClass = 8
+    InternalGameError = 9
     
 
 class HttpCode(Enum):

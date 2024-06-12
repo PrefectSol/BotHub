@@ -45,6 +45,7 @@ class Platform(Base):
         self._app.add_url_rule('/auth', view_func=self.__auth, methods=['POST'])
         self._app.add_url_rule('/deauth', view_func=self.__deauth, methods=['POST'])
         self._app.add_url_rule('/createhost', view_func=self.__create_host, methods=['POST'])
+        self._app.add_url_rule('/deletehost', view_func=self.__delete_host, methods=['POST'])
 
         self._app.config['MAX_CONTENT_LENGTH'] = self._max_file_size_mb * 1024 * 1024
         
@@ -57,6 +58,24 @@ class Platform(Base):
         
     def __del__(self):
         self.plog('Finished.', StatusCode.Finished)
+        
+        
+    def __delete_host(self):
+        if not self._is_enable_net:
+            return {'error': 'Network module is disabled.'}, HttpCode.ServiceUnvaliable.value
+        
+        data = request.get_json()
+        if not 'user_id' in data or not 'user_sign' in data:
+            return {'error': 'The user parameters is not sets.'}, HttpCode.BadRequest.value
+        
+        if not 'host_id' in data:
+            return {'error': 'The host_id is not set.'}, HttpCode.BadRequest.value
+
+        result_code = self.delete_host(data['user_id'], data['user_sign'], data['host_id'])
+        if result_code == StatusCode.Success:
+            return {'msg': f'Host {data["host_id"]} has been successfully deleted.'}, HttpCode.Ok.value
+        
+        return {'error': 'Unknown error. See the logs...'}, HttpCode.InternalServerError.value
         
         
     def __create_host(self):

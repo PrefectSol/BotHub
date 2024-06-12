@@ -1,14 +1,15 @@
 import os
 import time
+import shutil
 import threading
 import hashlib
-import json
 import secrets
 import subprocess
 from datetime import datetime
 
 from utils.status import StatusCode
 from utils.permissions import Permissions
+from hub.hprocess_handler import HProcessHandler
 
 
 class Base:
@@ -32,6 +33,7 @@ class Base:
         self.__update_dates()
         
         self._update_thread = threading.Thread(target=self.__updater)
+        self._hprocess_handler = HProcessHandler(self.hlog_to)
     
 
     def init_base(self, encoder, platform_file):
@@ -41,7 +43,7 @@ class Base:
         
     def __update_dates(self):
         self._current_date = datetime.now()
-        self._plog_file = os.path.join(self._platform_dir, self._current_date.strftime("%Y-%m-%d-%H:%M:%S"))
+        self._log_file = self._current_date.strftime("%Y-%m-%d_%H:%M:%S")
     
 
     def __updater(self):
@@ -72,7 +74,7 @@ class Base:
             
         return StatusCode.Success
     
-    
+
     def run_updater(self, log_update: float, delay: int):
         self._log_update = log_update
         self._delay = delay
@@ -82,6 +84,10 @@ class Base:
     
     def stop_updater(self):
         self._is_update = False
+    
+    
+    def delete_host(self, user_id, user_sign, host_id) -> StatusCode:
+        pass
         
 
     def create_host(self, user_id, user_sign, host: dict) -> tuple[int, StatusCode]:
@@ -89,60 +95,42 @@ class Base:
         if result != StatusCode.Success:
             return -1, result
         
-        dirs = [name for name in os.listdir(self._hosts_dir) if os.path.isdir(os.path.join(self._users_dir, name)) and name.startswith('host_')]
+        dirs = [name for name in os.listdir(self._hosts_dir) if os.path.isdir(os.path.join(self._hosts_dir, name)) and name.startswith('host_')]
         numbers = [int(file.split('_')[1]) for file in dirs]
         host_id = str(min(set(range(1, len(numbers) + 2)) - set(numbers)))
         
-        hostdir = os.path.join(self._hosts_dir, f'host_{host_id}/')
-        os.mkdir(hostdir)
+        subprocess.check_output(['pip', 'install'] + host['requirements'].split(' '))
+    
+        pid = self._hprocess_handler.create(host['game'], host['source'], host['settings'], host_id)
         
-        requirements_file = os.path.join(hostdir, 'requirements.txt')
-        with open(requirements_file, 'w') as file:
-            file.write(host['requirements'])
+        host_dir = os.path.join(self._hosts_dir, f'host_{host_id}/')
+        os.mkdir(host_dir)
+        
+        with open(os.path.join(host_dir, 'owner.env'), 'w') as file:
+            file.write(user_id)
             
-        host_file = os.path.join(hostdir, 'host.py')
-        with open(host_file, 'w') as file:
-            file.write(host['source'])
-                     
-        with open(os.path.join(hostdir, 'Dockerfile'), 'w') as file:
-            file.write(f'''FROM python:3.12.3
-
-WORKDIR /bothub-platform-host-{host_id}
-
-COPY {requirements_file} /bothub-platform-host-{host_id}/requirements.txt
-
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY hub/bot.py /bothub-platform/bot.py
-COPY hub/game.py /bothub-platform/game.py
-COPY hub/host_process.py /bothub-platform/host_process.py
-COPY {host_file} /bothub-platform/host.py
-
-CMD ["python", "host_process.py"]''')
-        
-        result = subprocess.check_output(['docker', 'build', '-t', f'bothub-platform-host-{host_id}', hostdir])
-        host_dpid = subprocess.check_output(['docker', 'run', '-d', f'bothub-platform-host-{host_id}'])
-
-        with open(self._platform_file, 'rb') as file:
-            data = json.loads(file.read().decode(self._encoder))
+        with open(os.path.join(self._users_dir, f'user_{user_id}.env'), 'a') as file:
+            file.write(f' {host_id}')
             
-        if not 'hosts' in data: 
-            data['hosts'] = []
-        data['hosts'].append(host_dpid)
-        
-        with open(self._platform_file, 'wb') as file:
-            file.write(json.dumps(data).encode(self._encoder))
-                    
         return host_id, StatusCode.Success
         
     
     def delete_user(self, user_id, user_sign) -> StatusCode:
         userfile = os.path.join(self._users_dir, f'user_{user_id}.env')
         result = self.__check_user(user_id=user_id, user_sign=user_sign)
-        if result == StatusCode.Success:
-            os.remove(userfile)
+        if result != StatusCode.Success:
+            return result
+       
+        with open(userfile, 'r') as file:
+            data = file.read().split(' ')
         
-        return result
+        hosts = data[4:]
+        for host in hosts:
+            shutil.rmtree(os.path.join(self._hosts_dir, f'host_{host}'))    
+            
+        os.remove(userfile)
+       
+        return StatusCode.Success
      
     
     def add_user(self, permissions: Permissions) -> tuple[dict, StatusCode]:
@@ -163,10 +151,11 @@ CMD ["python", "host_process.py"]''')
     
     
     def plog(self, msg: str, status: StatusCode = StatusCode.Unknown):
-        with open(self._plog_file, 'a') as file:
+        with open(os.path.join(self._platform_dir, self._log_file) + '.log', 'a') as file:
             file.write(f'[{datetime.now()}] --- [{status.name}:{status.value}] --- {msg}\n')
             
             
     def hlog_to(self, msg: str, target: str, status: StatusCode = StatusCode.Unknown):
-        with open(os.path.join(self._hosts_dir, target), 'a') as file:
+        host_dir = os.path.join(self._hosts_dir, target)
+        with open(os.path.join(host_dir, self._log_file) + '.log', 'a') as file:
             file.write(f'[{datetime.now()}] --- [{status.name}:{status.value}] --- {msg}\n')

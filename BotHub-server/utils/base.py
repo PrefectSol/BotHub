@@ -86,6 +86,10 @@ class Base:
         self._is_update = False
     
     
+    def is_view(self, user_id, user_sign) -> StatusCode:
+        return self.__check_user(user_id=user_id, user_sign=user_sign, permissions=(False, False, True))
+    
+    
     def post_bot(self, user_id, user_sign, bot_source, host_id) -> StatusCode:
         result = self.__check_user(user_id=user_id, user_sign=user_sign, permissions=(False, True, False))
         if result != StatusCode.Success:

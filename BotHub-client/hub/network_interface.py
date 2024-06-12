@@ -58,3 +58,10 @@ class NetworkInterface:
         response = requests.post(url=f'{NetworkInterface.server_url}/postbot', json=data)
         
         return {'code': response.status_code, 'answer': json.loads(response.text)}
+    
+    
+    def view(self):
+        data = {'user_id': self._user_id, 'user_sign': self._user_sign}
+        response = requests.post(url=f'{NetworkInterface.server_url}/view', json=data)
+        
+        return {'code': response.status_code, 'answer': json.loads(response.text)}

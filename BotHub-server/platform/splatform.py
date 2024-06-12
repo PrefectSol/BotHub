@@ -7,7 +7,7 @@ import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from flask import Flask, request
+from flask import Flask, request, render_template_string, send_file
 
 from utils.status import StatusCode, HttpCode
 from utils.permissions import Permissions
@@ -16,7 +16,8 @@ from utils.base import Base
 
 class Platform(Base):
     def __init__(self, opt):
-        super().__init__('/bothub-platform/database/')
+        self._database_path = '/bothub-platform/database/'
+        super().__init__(self._database_path)
         
         try:        
             with open(opt.config, 'r') as file:
@@ -47,6 +48,9 @@ class Platform(Base):
         self._app.add_url_rule('/createhost', view_func=self.__create_host, methods=['POST'])
         self._app.add_url_rule('/deletehost', view_func=self.__delete_host, methods=['POST'])
         self._app.add_url_rule('/postbot', view_func=self.__post_bot, methods=['POST'])
+        self._app.add_url_rule('/view', view_func=self.__view, methods=['POST'])
+        self._app.add_url_rule(f'/database/', defaults={'req_path': ''}, view_func=self.__dir_listing, methods=['GET'])
+        self._app.add_url_rule(f'/database/<path:req_path>', view_func=self.__dir_listing, methods=['GET'])
 
         self._app.config['MAX_CONTENT_LENGTH'] = self._max_file_size_mb * 1024 * 1024
         
@@ -60,6 +64,41 @@ class Platform(Base):
     def __del__(self):
         self.plog('Finished.', StatusCode.Finished)
         
+        
+    def __dir_listing(self, req_path=''):
+        BASE_DIR = 'database'
+        abs_path = os.path.join(BASE_DIR, req_path)
+
+        if not os.path.exists(abs_path):
+            return "Not Found", 404
+
+        if os.path.isfile(abs_path):
+            return send_file(abs_path)
+
+        files_and_dirs = os.listdir(abs_path)
+        files_and_dirs = [os.path.join(req_path, fad) for fad in files_and_dirs]
+        return render_template_string("""
+        <ul>
+            {% for item in items %}
+            <li><a href="{{ item }}">{{ item }}</a></li>
+            {% endfor %}
+        </ul>
+        """, items=files_and_dirs)
+        
+        
+    def __view(self):
+        if not self._is_enable_net:
+            return {'error': 'Network module is disabled.'}, HttpCode.ServiceUnvaliable.value
+        
+        data = request.get_json()
+        if not 'user_id' in data or not 'user_sign' in data:
+            return {'error': 'The user parameters is not sets.'}, HttpCode.BadRequest.value
+      
+        if self.is_view(data['user_id'], data['user_sign']):
+            return {'msg': f'http://{self._host}:{self._port}/database'}, HttpCode.Ok.value
+        
+        return {'error': 'Unknown error. See the logs...'}, HttpCode.InternalServerError.value
+    
         
     def __post_bot(self):
         if not self._is_enable_net:

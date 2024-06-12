@@ -2,7 +2,6 @@ import time
 import re
 from multiprocessing import Process
 
-from hub.game import Game
 from utils.status import StatusCode
 
 
@@ -17,12 +16,11 @@ class HProcess(Process):
             
         
     def run(self):       
-        # time.sleep(100) 
-        # if not self.__add_class(self._game_config, self._source_code, self._settings):
-        #     self._log_data['msg'] = 'Failed to create custom class.'
-        #     self._log_data['status'] = StatusCode.FailedCreateUserClass
-        #     self._child_conn.send(self._log_data)
-        #     return 
+        if not self.__add_class(self._game_config, self._source_code, self._settings):
+            self._log_data['msg'] = 'Failed to create custom class.'
+            self._log_data['status'] = StatusCode.FailedCreateUserClass
+            self._child_conn.send(self._log_data)
+            return 
 
         self.__await_bots()
         

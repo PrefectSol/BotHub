@@ -17,7 +17,7 @@ class HProcessHandler:
         hprocess.start()
 
         comm_thread = Thread(target=self._communicate, args=(parent_conn, child_conn, hprocess.pid, host_id))
-        self._processes[host_id] = [hprocess, True]
+        self._processes[host_id] = [hprocess, True, parent_conn, child_conn]
         comm_thread.start()
 
         return hprocess.pid
@@ -27,11 +27,17 @@ class HProcessHandler:
         self._processes[host_id][0].kill()
         self._processes[host_id][0].join()
         self._processes[host_id][1] = False
-    
+
+        
+    def send_data(self, host_id, data):
+        self._processes[host_id][2].send(data)
+
     
     def _communicate(self, parent_conn, child_conn, pid, host_id):
         while self._processes[host_id][1]:
             data = parent_conn.recv()
             self._log(data['msg'], str(host_id), data['status'])
         
+        self._processes[host_id][2].close()
+        self._processes[host_id][3].close()
         self._processes.pop(host_id)

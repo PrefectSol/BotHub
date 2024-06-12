@@ -6,15 +6,8 @@
             "databaseView": true
         },
         "user_id": "1",
-        "user_secret": "3a73198570c83d140f3fdb2e4ab2f466"
+        "user_secret": "5d1a4d6b5ba34237a35ae69b3fc6f020"
     },
     "host": "172.17.0.2",
-    "port": "5000",
-    "request": {
-        "bot": "bot/bot.py",
-        "metadata": {
-            "from": "client_name",
-            "description": "bot v1.0"
-        }
-    }
+    "port": "5000"
 }

@@ -51,3 +51,10 @@ class NetworkInterface:
         response = requests.post(url=f'{NetworkInterface.server_url}/deletehost', json=data)
         
         return {'code': response.status_code, 'answer': json.loads(response.text)}
+    
+    
+    def post_bot(self, bot_source, host_id):
+        data = {'user_id': self._user_id, 'user_sign': self._user_sign, 'bot_source': bot_source, 'host_id': host_id}
+        response = requests.post(url=f'{NetworkInterface.server_url}/postbot', json=data)
+        
+        return {'code': response.status_code, 'answer': json.loads(response.text)}

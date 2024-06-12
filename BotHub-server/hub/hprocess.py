@@ -17,14 +17,14 @@ class HProcess(Process):
             
         
     def run(self):       
-        time.sleep(100) 
+        # time.sleep(100) 
         # if not self.__add_class(self._game_config, self._source_code, self._settings):
         #     self._log_data['msg'] = 'Failed to create custom class.'
         #     self._log_data['status'] = StatusCode.FailedCreateUserClass
         #     self._child_conn.send(self._log_data)
         #     return 
 
-        # self.__await_bots()
+        self.__await_bots()
         
         # self._game.set_state()
         # self.__log()
@@ -38,7 +38,8 @@ class HProcess(Process):
             
     
     def __await_bots(self):
-        pass        
+        self._log_data['msg'] = self._child_conn.recv()
+        self._child_conn.send(self._log_data)
     
             
     def __add_class(self, game_config: dict, source_code: str, settings: dict) -> bool:

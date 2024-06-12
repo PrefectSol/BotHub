@@ -86,6 +86,16 @@ class Base:
         self._is_update = False
     
     
+    def post_bot(self, user_id, user_sign, bot_source, host_id) -> StatusCode:
+        result = self.__check_user(user_id=user_id, user_sign=user_sign, permissions=(False, True, False))
+        if result != StatusCode.Success:
+            return result
+        
+        self._hprocess_handler.send_data(host_id, bot_source)
+        
+        return StatusCode.Success
+    
+    
     def delete_host(self, user_id, user_sign, host_id) -> StatusCode:
         result = self.__check_user(user_id=user_id, user_sign=user_sign, permissions=(True, False, False))
         if result != StatusCode.Success:
@@ -177,6 +187,6 @@ class Base:
             
             
     def hlog_to(self, msg: str, target: str, status: StatusCode = StatusCode.Unknown):
-        host_dir = os.path.join(self._hosts_dir, target)
+        host_dir = os.path.join(self._hosts_dir, f'host_{target}/')
         with open(os.path.join(host_dir, self._log_file) + '.log', 'a') as file:
             file.write(f'[{datetime.now()}] --- [{status.name}:{status.value}] --- {msg}\n')

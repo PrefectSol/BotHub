@@ -87,9 +87,30 @@ class Base:
     
     
     def delete_host(self, user_id, user_sign, host_id) -> StatusCode:
-        pass
+        result = self.__check_user(user_id=user_id, user_sign=user_sign, permissions=(True, False, False))
+        if result != StatusCode.Success:
+            return result
         
+        with open(os.path.join(self._users_dir, f'user_{user_id}.env'), 'r') as file:
+            data = file.read().split(' ')
+            
+        hosts = data[4:]
+        if host_id not in hosts:
+            return StatusCode.HostNotFound
+        
+        self._hprocess_handler.delete(host_id)
+        
+        hosts.remove(host_id)
+        with open(os.path.join(self._users_dir, f'user_{user_id}.env'), 'w') as file:
+            file.write(f'{data[0]} {data[1]} {data[2]} {data[3]}')
+            for host in hosts:
+                file.write(' ' + host)
 
+        shutil.rmtree(os.path.join(self._hosts_dir, f'host_{host_id}'))
+        
+        return StatusCode.Success
+        
+        
     def create_host(self, user_id, user_sign, host: dict) -> tuple[int, StatusCode]:
         result = self.__check_user(user_id=user_id, user_sign=user_sign, permissions=(True, False, False))
         if result != StatusCode.Success:
@@ -116,11 +137,11 @@ class Base:
         
     
     def delete_user(self, user_id, user_sign) -> StatusCode:
-        userfile = os.path.join(self._users_dir, f'user_{user_id}.env')
         result = self.__check_user(user_id=user_id, user_sign=user_sign)
         if result != StatusCode.Success:
             return result
-       
+        
+        userfile = os.path.join(self._users_dir, f'user_{user_id}.env')       
         with open(userfile, 'r') as file:
             data = file.read().split(' ')
         

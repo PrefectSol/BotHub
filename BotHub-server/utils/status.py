@@ -13,6 +13,7 @@ class StatusCode(Enum):
     FailedCreateHost = 7
     FailedCreateUserClass = 8
     InternalGameError = 9
+    HostNotFound = 10
     
 
 class HttpCode(Enum):
